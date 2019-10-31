@@ -181,3 +181,7 @@ TSWLatexianTemp*
 
 # C++
 *.out
+
+
+.DS_Store
+.vscode
