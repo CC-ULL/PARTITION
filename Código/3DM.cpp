@@ -74,16 +74,9 @@ vector<tripleta> _3DM::getW() const{
     return w_;
 }
 
-bitVector bitFrom3DM(){
-    int n_bits = ceil(log2(w_.size() + 1));
-    int n_elements = x_.size();
-    bitVector bits(n_bits, n_elements, 3);
-
-    for(int i = 0; i < w_.size(); i++){
-        bits.setBit()
-    }
-    
-}
+/*vector<int> _3DM::transformToPartition(){
+    //TODO
+}*/
 
 int find(vector<string> a, string b){
     for(int i=0;i<a.size();i++){
@@ -91,6 +84,49 @@ int find(vector<string> a, string b){
             return i;
         }
     }
+}
+
+long int pow2(int exp){
+    //cout<<"exponente="<<exp<<endl;
+    long int result=1;
+    int base=2;
+    for(int i=0;i<exp;i++){
+        result=result*base;
+        /*if(i<3){
+            cout<<"2 elevado a "<<i<<"="<<result<<endl;
+        }*/
+    }
+    return result;
+}
+
+long int binario_a_decimal(vector<int> v){
+
+  long int a_decimal=0;
+  for(int j=0; j<v.size(); j++){
+    if(v[j]==1){
+        long int potencia=pow2(v.size()-(j+1));
+        a_decimal+=potencia;
+    }
+  }
+
+  return a_decimal;
+
+}
+
+vector<int> decimal_a_binario(long int v,int n_bits){
+  vector<int> sol(0);
+  long int dividendo=v;
+  while(dividendo!=0){
+    long int cociente=dividendo/2;
+    int resto=dividendo%2;
+    sol.insert(sol.begin(),resto);
+    dividendo=cociente;
+  }
+
+  while(sol.size()<n_bits){
+    sol.insert(sol.begin(),0);
+  }
+  return sol;
 }
 
 vector<int> _3DM::transformToPartition(){
@@ -112,40 +148,39 @@ vector<int> _3DM::transformToPartition(){
     vector<int> b(3*n_elements*n_bits,0);
     for(int i=0; i<(3*n_elements); i++){
         b[n_bits*(i+1)-1]=1;
-        b[(n_elements*n_bits)+n_bits*(i+1)-1]=1;
-        b[(2*n_elements*n_bits)+n_bits*(i+1)-1]=1;
+        cout<<((2*n_elements*n_bits)+n_bits*(i+1)-1)%b.size()<<" "<<b.size()<<endl;
+        //assert((2*n_elements*n_bits)+n_bits*(i+1)-1 < 3*n_elements*n_bits);
+        b[((n_elements*n_bits)+n_bits*(i+1)-1)%b.size()]=1;
+
+        b[((2*n_elements*n_bits)+n_bits*(i+1)-1)%b.size()]=1;
     }
 
 
 
     //CALCULAR LOS ELEMENTOS AÑADIDOS AL PARTITION PARA QUE SI EXISTE UN SUBCONJUNTO DE LOS ELEMENTOS QUE YA TENEMOS QUE SUME b EL PARTITION TENGA SOLUCIÓN
-     cout<<"p="<<3*n_elements*n_bits<<endl;
-    vector<int> c(10);
-    cout<<"p"<<endl;
+    vector<int> c(3*n_elements*n_bits);
+
     for(int i=0;i<datos.size();i++){
-        //ESCRIBIR sumatorio
-        {
-            string str("");
-            for(int j=0; j<c.size(); j++){
-                str+=to_string(c[j]);
-                if((j+1)%(n_bits*n_elements)==0 && (j+1)%(3*n_bits*n_elements)!=0){
-                    str+="|";
-                }
-            }
-            cout<<"sumat=["+str+"]"<<endl;
-        }
+
         for(int j=0;j<datos[i].size();j++){
             if(datos[i][j]==1){
                 int k=j;
                 while(c[k]==1){
                     c[k]=0;
-                    k++;
+                    k--;
                 }
                 c[k]=1;
             }
         }
     }
 
+    long int sumatorio=binario_a_decimal(c);
+    long int b_decimal=binario_a_decimal(b);
+    long int b1_decimal=(2*sumatorio)-b_decimal;
+    long int b2_decimal=(sumatorio)+b_decimal;
+
+    vector<int> b1=decimal_a_binario(b1_decimal,3*n_elements*n_bits);
+    vector<int> b2=decimal_a_binario(b2_decimal,3*n_elements*n_bits);
 
 
     //ESCRIBIR b
@@ -157,7 +192,49 @@ vector<int> _3DM::transformToPartition(){
                 str+="|";
             }
         }
-        cout<<"b=["+str+"]"<<endl;
+        cout<<"    b=["+str+"]"<<endl;
+    }
+
+    //ESCRIBIR sumatorio
+    {
+        string str("");
+        long int a_decimal=0;
+        for(int j=0; j<c.size(); j++){
+            str+=to_string(c[j]);
+            if(c[j]==1){
+                long int potencia=pow2(c.size()-(j+1));
+                a_decimal+=potencia;
+            }
+            if((j+1)%(n_bits*n_elements)==0 && (j+1)%(3*n_bits*n_elements)!=0){
+                str+="|";
+            }
+        }
+        cout<<"sumat=["+str+"]="<<a_decimal<<"="<<sumatorio<<endl;
+    }
+
+    c=decimal_a_binario(sumatorio,c.size());
+    {
+        string str("");
+        long int a_decimal=0;
+        for(int j=0; j<c.size(); j++){
+            str+=to_string(c[j]);
+            if(c[j]==1){
+                long int potencia=pow2(c.size()-(j+1));
+                a_decimal+=potencia;
+            }
+            if((j+1)%(n_bits*n_elements)==0 && (j+1)%(3*n_bits*n_elements)!=0){
+                str+="|";
+            }
+        }
+        cout<<"sumat=["+str+"]="<<a_decimal<<endl;
+    }
+    {
+    vector<int> tres=decimal_a_binario(1234567,c.size());
+    string str("");
+    for(int i=0;i<tres.size();i++){
+      str+=to_string(tres[i]);
+    }
+    cout<<"tres="<<str<<endl;
     }
 
     //ESCRIBIR LOS ELEMENTOS DEL PARTITION SACADOS DIRECTAMENTE DEL CONJUNTO w_ EN BINARIO Y PASARLOS A DECIMAL
@@ -178,17 +255,7 @@ vector<int> _3DM::transformToPartition(){
         cout<<"s(a"<<i<<")="<<"["+str+"]="<<a_decimal<<endl;
     }
 
-    //ESCRIBIR sumatorio
-    {
-        string str("");
-        for(int j=0; j<c.size(); j++){
-            str+=to_string(c[j]);
-            if((j+1)%(n_bits*n_elements)==0 && (j+1)%(3*n_bits*n_elements)!=0){
-                str+="|";
-            }
-        }
-        cout<<"sumat=["+str+"]"<<endl;
-    }
+
 
     //ESCRIBIR LOS ELEMENTOS AÑADIDOS EN BINARIO Y PASARLOS A DECIMAL
 

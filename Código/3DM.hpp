@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <cmath>
 #include "tripleta.hpp"
-#include "bitVector.hpp"
+#include <cassert>
 
 using namespace std;
 
