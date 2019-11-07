@@ -10,5 +10,7 @@ int main(int argc, char const *argv[]) {
     _3DM problema("./problema1.3dm");
 
     cout << problema << endl;
+
+    problema.transformToPartition();
     return 0;
 }

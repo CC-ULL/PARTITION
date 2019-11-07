@@ -74,8 +74,132 @@ vector<tripleta> _3DM::getW() const{
     return w_;
 }
 
-vector<int> _3DM::transformToPartition(){
+/*vector<int> _3DM::transformToPartition(){
     //TODO
+}*/
+
+int find(vector<string> a, string b){
+    for(int i=0;i<a.size();i++){
+        if(a[i]==b){
+            return i;
+        }
+    }
+}
+
+long int pow2(int exp){
+    //cout<<"exponente="<<exp<<endl;
+    long int result=1;
+    int base=2;
+    for(int i=0;i<exp;i++){
+        result=result*base;
+        /*if(i<3){
+            cout<<"2 elevado a "<<i<<"="<<result<<endl;
+        }*/
+    }
+    return result;
+}
+vector<int> _3DM::transformToPartition(){
+    vector<int> partition(w_.size()+2,0);       //EL CONJUNTO DE SIZES DEL PROBLEMA PARTITION
+    int n_bits=ceil(log2(w_.size()+1));         //NÚMERO DE BITS NECESARIOS PARA REPRESENTAR EL NÚMERO MÁXIMO DE REPETICIONES DE UN ELEMENTO EN EL CONJUNTO w_
+    int n_elements=x_.size();                   //NÚMERO DE ELEMENTOS QUE HAY EN LOS SETS x_,y_,z_
+    vector<int> aux(3*n_elements*n_bits,0);     //VECTOR PARA REPRESENTAR CADA UNO DE LOS ELEMENTOS DEL PARTITION EN BINARIO
+    vector<vector<int> > datos(w_.size(),aux);  //CONJUNTO DE VECTORES aux
+
+    //PASAR LA TRIPLETA w_[i] DEL PROBLEMA 3DM A SU REPRESENTACIÓN EN BINARIO PARA EL SIZE DEL PROBLEMA PARTITION
+    for(int i=0; i<datos.size(); i++){
+        datos[i][n_bits*(find(x_,w_[i].getX())+1)-1]=1;
+        datos[i][(n_elements*n_bits)+n_bits*(find(y_,w_[i].getY())+1)-1]=1;
+        datos[i][(2*n_elements*n_bits)+n_bits*(find(z_,w_[i].getZ())+1)-1]=1;
+        cout<<"listo:{"<<w_[i].getX()<<" "<<w_[i].getY()<<" "<<w_[i].getZ()<<"}"<<endl;
+    }
+
+    //ELEMENTO QUE REPRESENTA EL MATCH EN EL 3DM PASADO A SIZE DEL PARTITION
+    vector<int> b(3*n_elements*n_bits,0);
+    for(int i=0; i<(3*n_elements); i++){
+        b[n_bits*(i+1)-1]=1;
+        b[(n_elements*n_bits)+n_bits*(i+1)-1]=1;
+        b[(2*n_elements*n_bits)+n_bits*(i+1)-1]=1;
+    }
+
+
+
+    //CALCULAR LOS ELEMENTOS AÑADIDOS AL PARTITION PARA QUE SI EXISTE UN SUBCONJUNTO DE LOS ELEMENTOS QUE YA TENEMOS QUE SUME b EL PARTITION TENGA SOLUCIÓN
+     cout<<"p="<<3*n_elements*n_bits<<endl;
+    vector<int> c(10);
+    cout<<"p"<<endl;
+    for(int i=0;i<datos.size();i++){
+        //ESCRIBIR sumatorio
+        {
+            string str("");
+            for(int j=0; j<c.size(); j++){
+                str+=to_string(c[j]);
+                if((j+1)%(n_bits*n_elements)==0 && (j+1)%(3*n_bits*n_elements)!=0){
+                    str+="|";
+                }
+            }
+            cout<<"sumat=["+str+"]"<<endl;
+        }
+        for(int j=0;j<datos[i].size();j++){
+            if(datos[i][j]==1){
+                int k=j;
+                while(c[k]==1){
+                    c[k]=0;
+                    k++;
+                }
+                c[k]=1;
+            }
+        }
+    }
+
+
+
+    //ESCRIBIR b
+    {
+        string str("");
+        for(int j=0; j<b.size(); j++){
+            str+=to_string(b[j]);
+            if((j+1)%(n_bits*n_elements)==0 && (j+1)%(3*n_bits*n_elements)!=0){
+                str+="|";
+            }
+        }
+        cout<<"b=["+str+"]"<<endl;
+    }
+
+    //ESCRIBIR LOS ELEMENTOS DEL PARTITION SACADOS DIRECTAMENTE DEL CONJUNTO w_ EN BINARIO Y PASARLOS A DECIMAL
+    for(int i=0; i<datos.size(); i++){
+        string str("");
+        long int a_decimal=0;
+        for(int j=0; j<datos[i].size(); j++){
+            str+=to_string(datos[i][j]);
+            if(datos[i][j]==1){
+                long int potencia=pow2(datos[i].size()-(j+1));
+                a_decimal+=potencia;
+            }
+            if((j+1)%(n_bits*n_elements)==0 && (j+1)%(3*n_bits*n_elements)!=0){
+                str+="|";
+            }
+        }
+        partition[i]=a_decimal;
+        cout<<"s(a"<<i<<")="<<"["+str+"]="<<a_decimal<<endl;
+    }
+
+    //ESCRIBIR sumatorio
+    {
+        string str("");
+        for(int j=0; j<c.size(); j++){
+            str+=to_string(c[j]);
+            if((j+1)%(n_bits*n_elements)==0 && (j+1)%(3*n_bits*n_elements)!=0){
+                str+="|";
+            }
+        }
+        cout<<"sumat=["+str+"]"<<endl;
+    }
+
+    //ESCRIBIR LOS ELEMENTOS AÑADIDOS EN BINARIO Y PASARLOS A DECIMAL
+
+
+    return partition;
+
 }
 
 string printVector(string name, vector<string> vector_){
