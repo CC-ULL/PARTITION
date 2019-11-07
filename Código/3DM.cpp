@@ -74,9 +74,16 @@ vector<tripleta> _3DM::getW() const{
     return w_;
 }
 
-/*vector<int> _3DM::transformToPartition(){
-    //TODO
-}*/
+bitVector bitFrom3DM(){
+    int n_bits = ceil(log2(w_.size() + 1));
+    int n_elements = x_.size();
+    bitVector bits(n_bits, n_elements, 3);
+
+    for(int i = 0; i < w_.size(); i++){
+        bits.setBit()
+    }
+    
+}
 
 int find(vector<string> a, string b){
     for(int i=0;i<a.size();i++){
@@ -86,18 +93,6 @@ int find(vector<string> a, string b){
     }
 }
 
-long int pow2(int exp){
-    //cout<<"exponente="<<exp<<endl;
-    long int result=1;
-    int base=2;
-    for(int i=0;i<exp;i++){
-        result=result*base;
-        /*if(i<3){
-            cout<<"2 elevado a "<<i<<"="<<result<<endl;
-        }*/
-    }
-    return result;
-}
 vector<int> _3DM::transformToPartition(){
     vector<int> partition(w_.size()+2,0);       //EL CONJUNTO DE SIZES DEL PROBLEMA PARTITION
     int n_bits=ceil(log2(w_.size()+1));         //NÚMERO DE BITS NECESARIOS PARA REPRESENTAR EL NÚMERO MÁXIMO DE REPETICIONES DE UN ELEMENTO EN EL CONJUNTO w_
