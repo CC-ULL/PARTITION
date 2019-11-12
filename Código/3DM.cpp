@@ -4,7 +4,7 @@ _3DM::_3DM(vector<string> x, vector<string> y, vector<string> z) {
     x_ = x;
     y_ = y;
     z_ = z;
-};
+}
 
 _3DM::_3DM(string fichero){
     try {
@@ -56,7 +56,7 @@ _3DM::~_3DM() {
     x_.clear();
     y_.clear();
     z_.clear();
-};
+}
 
 vector<string> _3DM::getX() const{
     return x_;
@@ -94,10 +94,7 @@ vector<long int> _3DM::transformToPartition(){
         datos[i].setBit(true, find(x_,w_[i].getX()), 1);
         datos[i].setBit(true, find(y_,w_[i].getY()), 2);
         datos[i].setBit(true, find(z_,w_[i].getZ()), 3);
-
-    /*for(int i = 0; i < datos.size(); i++){
-        partition.push_back(datos[i]..toDecimal())
-    }*/
+    }
 
     for(int i = 0; i < datos.size(); i++){
         cout << "S(a" << i << ") = " << w_[i] << " = " << datos[i] << " = " << datos[i].toDecimal() << endl;
@@ -117,7 +114,6 @@ vector<long int> _3DM::transformToPartition(){
 
     //ELEMENTO QUE REPRESENTA EL MATCH EN EL 3DM PASADO A SIZE DEL PARTITION
     bitVector b (n_bits, n_elements, 3);
-    //for(int i = 1; i <= (3*n_elements); i++){
     for(int i = 1; i <= (n_elements); i++){
         b.setBit(true, i, 1);
         b.setBit(true, i, 2);
@@ -137,20 +133,13 @@ vector<long int> _3DM::transformToPartition(){
     cout << "b1 = " << b1 << " = " << b1.toDecimal() << endl;
     cout << "b2 = " << b2 << " = " << b2.toDecimal() << endl << endl;
 
-    /*cout << "RESULT: [";
-    for(int i = 0; i < partition.size(); i++){
-        cout << partition[i] << " ";
-    }
-    cout << " ]" << endl;*/
-
     return partition;
-
 }
 
 string printVector(string name, vector<string> vector_){
     string result = name;
     result += ": ";
-    for (vector<string>::iterator it=vector_.begin(); it!=vector_.end(); ++it){
+    for (vector<string>::iterator it=vector_.begin(); it!=vector_.end(); ++it) {
         result += *it + " ";
     }
     return result;
@@ -163,7 +152,7 @@ ostream& operator <<(ostream& os, const _3DM &p) {
 
     vector<tripleta> w = p.getW();
     os << "W: ";
-    for (vector<tripleta>::iterator it = w.begin(); it != w.end(); it++){
+    for (vector<tripleta>::iterator it = w.begin(); it != w.end(); it++) {
         os << (*it);
         os << " ";
     }
@@ -171,7 +160,7 @@ ostream& operator <<(ostream& os, const _3DM &p) {
 }
 
 
-vector<string> split (string str_, string delimiter){
+vector<string> split (string str_, string delimiter) {
     vector<string> ocurrences;
     string str = str_;
     int last = 0;
@@ -188,7 +177,7 @@ vector<string> split (string str_, string delimiter){
     return ocurrences;
 }
 
-vector<tripleta> createW (vector<string> matches){
+vector<tripleta> createW (vector<string> matches) {
     vector<string> elements;
     vector<tripleta> w;
     try{
