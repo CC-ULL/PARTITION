@@ -24,7 +24,7 @@ class _3DM {
         vector<string> getZ() const;
         vector<tripleta> getW() const;
 
-        vector<int> transformToPartition();
+        vector<long int> transformToPartition();
 };
 
 ostream& operator << (ostream& os, const _3DM &p);

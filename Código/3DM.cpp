@@ -83,8 +83,8 @@ int find(vector<string> a, string b){
     return -1;
 }
 
-vector<int> _3DM::transformToPartition(){
-    vector<int> partition(w_.size() + 2, 0);                                //EL CONJUNTO DE SIZES DEL PROBLEMA PARTITION
+vector<long int> _3DM::transformToPartition(){
+    vector<long int> partition;                                                  //EL CONJUNTO DE SIZES DEL PROBLEMA PARTITION
     int n_bits = ceil(log2(w_.size() + 1));                                 //NÚMERO DE BITS NECESARIOS PARA REPRESENTAR EL NÚMERO MÁXIMO DE REPETICIONES DE UN ELEMENTO EN EL CONJUNTO w_
     int n_elements = x_.size();                                             //NÚMERO DE ELEMENTOS QUE HAY EN LOS SETS x_,y_,z_
     vector<bitVector> datos(w_.size(), bitVector(n_bits, n_elements, 3));   //VECTOR PARA REPRESENTAR CADA UNO DE LOS ELEMENTOS DEL PARTITION EN BINARIO
@@ -96,8 +96,13 @@ vector<int> _3DM::transformToPartition(){
         datos[i].setBit(true, find(z_,w_[i].getZ()), 3);
     }
 
+    /*for(int i = 0; i < datos.size(); i++){
+        partition.push_back(datos[i]..toDecimal())
+    }*/
+
     for(int i = 0; i < datos.size(); i++){
         cout << "S(a" << i << ") = " << w_[i] << " = " << datos[i] << " = " << datos[i].toDecimal() << endl;
+        partition.push_back(datos[i].toDecimal());
     }
 
     //CALCULAR LOS ELEMENTOS AÑADIDOS AL PARTITION PARA QUE SI EXISTE UN SUBCONJUNTO DE LOS ELEMENTOS QUE YA TENEMOS QUE SUME b EL PARTITION TENGA SOLUCIÓN
@@ -105,6 +110,8 @@ vector<int> _3DM::transformToPartition(){
     for(int i = 0;i < datos.size(); i++){
         sumatorio = sumatorio + datos[i];
     }
+
+    partition.push_back(sumatorio.toDecimal());
 
     cout << "\t\t∑ = " << sumatorio << " = " << sumatorio.toDecimal() << endl << endl;
 
@@ -117,13 +124,24 @@ vector<int> _3DM::transformToPartition(){
         b.setBit(true, i, 3);
     }
 
+    partition.push_back(b.toDecimal());
+
     cout << " b = " << b << " = " << b.toDecimal() << endl;
 
     bitVector b1 ((2 * sumatorio.toDecimal()) - b.toDecimal(), n_bits * n_elements * 3);
     bitVector b2 (sumatorio + b);
 
+    partition.push_back(b1.toDecimal());
+    partition.push_back(b2.toDecimal());
+
     cout << "b1 = " << b1 << " = " << b1.toDecimal() << endl;
-    cout << "b2 = " << b2 << " = " << b2.toDecimal() << endl;
+    cout << "b2 = " << b2 << " = " << b2.toDecimal() << endl << endl;
+
+    /*cout << "RESULT: [";
+    for(int i = 0; i < partition.size(); i++){
+        cout << partition[i] << " ";
+    }
+    cout << " ]" << endl;*/
 
     return partition;
 
