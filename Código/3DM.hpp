@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <cmath>
 #include "tripleta.hpp"
+
 #include "bitVector.hpp"
 
 using namespace std;

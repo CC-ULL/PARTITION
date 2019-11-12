@@ -94,7 +94,6 @@ vector<long int> _3DM::transformToPartition(){
         datos[i].setBit(true, find(x_,w_[i].getX()), 1);
         datos[i].setBit(true, find(y_,w_[i].getY()), 2);
         datos[i].setBit(true, find(z_,w_[i].getZ()), 3);
-    }
 
     /*for(int i = 0; i < datos.size(); i++){
         partition.push_back(datos[i]..toDecimal())
@@ -114,6 +113,7 @@ vector<long int> _3DM::transformToPartition(){
     partition.push_back(sumatorio.toDecimal());
 
     cout << "\t\t∑ = " << sumatorio << " = " << sumatorio.toDecimal() << endl << endl;
+
 
     //ELEMENTO QUE REPRESENTA EL MATCH EN EL 3DM PASADO A SIZE DEL PARTITION
     bitVector b (n_bits, n_elements, 3);
