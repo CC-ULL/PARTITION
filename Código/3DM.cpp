@@ -107,8 +107,6 @@ vector<long int> _3DM::transformToPartition(){
         sumatorio = sumatorio + datos[i];
     }
 
-    partition.push_back(sumatorio.toDecimal());
-
     cout << "\t\t∑ = " << sumatorio << " = " << sumatorio.toDecimal() << endl << endl;
 
 
@@ -119,8 +117,6 @@ vector<long int> _3DM::transformToPartition(){
         b.setBit(true, i, 2);
         b.setBit(true, i, 3);
     }
-
-    partition.push_back(b.toDecimal());
 
     cout << " b = " << b << " = " << b.toDecimal() << endl;
 
